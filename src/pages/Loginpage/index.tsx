@@ -1,15 +1,40 @@
 import { FormProvider, useForm, type SubmitHandler } from "react-hook-form";
-import InputField from "../common/form";
-type FormValues = {
-  email: string;
-  password: string;
-  remember: boolean;
-};
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { ajaxHandler } from "../../common/ajaxHandler";
+import { useAuth } from "../../common/AuthProvider";
+import InputField from "../../common/form";
+import type { FormValues, User } from "../../model/user";
+
 const Loginpage = () => {
   const methods = useForm<FormValues>();
-
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  // const fetchUsers = async () => {
+  //   try {
+  //     const data = await ajaxHandler<User[]>("/api/users", "GET");
+  //     console.log("Fetched Users:", data);
+  //   } catch (err) {
+  //     console.error("Failed to fetch users", err);
+  //   } finally {
+  //   }
+  // };
+  const doLogin = async (x: FormValues) => {
+    try {
+      const data = await ajaxHandler<User>("/login", "POST", x);
+      console.log("Fetched Users:", data);
+      toast.success("Login Successful ,Welcome - " + data.username);
+      login(data);
+      navigate("/landingpage");
+    } catch (err) {
+      console.error("Failed to fetch users", err);
+      toast.error("Invalid Credentials - Please try again.");
+    }
+  };
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log("Form Submitted:", data);
+    doLogin(data);
+    // fetchUsers();
     // Add login logic here (e.g., API call)
   };
 
@@ -23,10 +48,10 @@ const Loginpage = () => {
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
             <InputField
-              id="email"
-              label="Email address"
-              type="email"
-              placeholder="you@example.com"
+              id="username"
+              label="User Name"
+              type="text"
+              placeholder="UserName"
             />
 
             <InputField
@@ -60,7 +85,7 @@ const Loginpage = () => {
         </FormProvider>
 
         <p className="mt-6 text-sm text-center text-gray-600">
-          Don&apos;t have an account?{" "}
+          Don&apos;t have an account -- ?{" "}
           <a href="#" className="text-indigo-600 hover:underline">
             Sign up
           </a>

@@ -5,6 +5,8 @@
 @layer base {
   :root {
     --background: 203 29% 95%;
+    --background-base: linear-gradient(to right, #6366f1, #7c3aed, #ec4899);
+    --background-header: linear-gradient(to right bottom, #68a4dc, #ffffff);
     --foreground: 222 110% 18%;
 
     --card: 0 0% 100%;
@@ -37,9 +39,13 @@
 
   .dark {
     --background: 0 0% 3.9%;
+    --background-base: linear-gradient(to right, #030147bb, #2a0069, #48001d);
+    --background-header: linear-gradient(to left, #000000,
+        #340182,
+        #620228c3);
     --foreground: 0 0% 98%;
 
-    --card: 0 0% 3.9%;
+    --card: 10% 20% 39%;
     --card-foreground: 0 0% 98%;
 
     --popover: 0 0% 3.9%;
@@ -72,8 +78,20 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background-base text-foreground;
   }
+
+  header {
+    @apply bg-background-header text-foreground;
+  }
+}
+
+.bg-background-base {
+  background: var(--background-base);
+}
+
+.bg-background-header {
+  background: var(--background-header);
 }
 
 @layer components {

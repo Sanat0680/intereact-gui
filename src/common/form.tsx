@@ -1,10 +1,5 @@
 import { useFormContext } from "react-hook-form";
-
-type FormValues = {
-  email: string;
-  password: string;
-  remember: boolean;
-};
+import type { FormValues } from "../model/user";
 
 const InputField = ({
   id,
