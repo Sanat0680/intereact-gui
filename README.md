@@ -1,57 +1,65 @@
-# React + TypeScript + Vite
+# E-commerce Microservices Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+This is a full-stack e-commerce application built using a microservices architecture. The frontend is developed with **React** and **TypeScript**, while the backend is powered by **Spring Boot 4.0.0**. The app offers a smooth shopping experience with product listings, cart management, and payment integration.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- User-friendly UI with React and TypeScript
+- Dynamic product display from the backend database
+- User authentication (JWT planned for future)
+- Shopping cart with add/remove item functionality
+- Order checkout with billing details
+- Integrated Razorpay payment gateway (test mode)
+- Order status tracking and Toastr notifications for payment feedback
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Screenshots
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+<!-- ### Welcome Page -->
+<!-- ![Welcome Page](./images/welcome-page.png) -->
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Login Page
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+![Login Page](./images/login-page.png)
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    "react-x": reactX,
-    "react-dom": reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs["recommended-typescript"].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
-```
+### Product Landing Page
 
-<!-- react-hook-form  used this dependency to use form -->
-<!-- react-router-dom used this dependency to use form -->
+![Landing Page](./images/landing-page.png)
+
+### Checkout Page
+
+![Checkout Page](./images/checkout-page.png)
+
+### Razor Pay Payment Page
+
+![Thank You Page](./images/payment-page.png)
+
+### Thank You / Order Details Page
+
+![Thank You Page](./images/thankyou-page.png)
+
+## Technologies Used
+
+- Frontend: React, TypeScript, HTML, CSS, vite
+- Backend: Spring Boot 4.0.0
+- Database: SQL (currently local, planned for GCP)
+- Payment Gateway: Razorpay (Test mode)
+- Notifications: Toastr
+
+## Future Improvements
+
+- Implement JWT authentication
+- Host backend and database on Google Cloud Platform (GCP)
+- Complete payment success workflow with inventory updates
+- Add user order history and tracking section
+
+## Setup and Running
+
+1. Clone the repository
+2. Install frontend dependencies:
+   ```bash
+   cd INTERACTION-APP
+   npm install
+   npm run dev
+   ```
