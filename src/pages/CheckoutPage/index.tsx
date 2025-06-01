@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ajaxHandler } from "../../common/ajaxHandler";
 import BasePage from "../../common/base";
-import type { BillingFormData, InventoryItem } from "../../model/user";
+import type {
+  BillingFormData,
+  CreatedOrder,
+  InventoryItem,
+} from "../../model/user";
 import BillingForm from "./BillingForm";
 type PaymentIntentResponse = {
   id: string;
@@ -28,6 +32,8 @@ const CheckoutPage: React.FC = () => {
   const [submittedData, setSubmittedData] = useState<BillingFormData | null>(
     null
   );
+  //   const [createdOrderresponse, setOrderResponse] = useState<CreatedOrder>();
+  const navigate = useNavigate();
   const methods = useForm<BillingFormData>();
   const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cartItems.reduce(
@@ -44,8 +50,50 @@ const CheckoutPage: React.FC = () => {
       document.body.appendChild(script);
     });
   };
+  const placeOrder = async () => {
+    console.log("Placing order with data:", submittedData);
+    console.log("Cart Items:", cartItems);
+    const orderPayload: CreatedOrder = {
+      customerId: 8709, //change it with actual customer id
+      shippingAddress: `${submittedData?.address}, ${submittedData?.city}, ${submittedData?.pin}`,
+      billingAddress: `${submittedData?.address}, ${submittedData?.city}, ${submittedData?.pin}`,
+      status: "PENDING",
+      paymentMethod: "CARD",
+      notes: "Order placed via Intereact Page",
+      orderDate: new Date().toISOString(),
+      deliveryDate: new Date(
+        Date.now() + 4 * 24 * 60 * 60 * 1000
+      ).toISOString(), // +4 days
+      totalAmount: totalPrice,
+      items: cartItems.map((item) => ({
+        productId: item.id,
+        productName: item.name,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+    };
+    const createdOrder = await ajaxHandler<CreatedOrder>(
+      "/api/create/order",
+      "POST",
+      orderPayload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+    // setOrderResponse(createdOrder);
 
-  const handleRazorpayPayment = async () => {
+    console.log("Order Payload:", createdOrder);
+
+    handleRazorpayPayment(createdOrder);
+    navigate("/thankyoupage", {
+      state: { createdOrderresponse: createdOrder },
+    });
+  };
+  const handleRazorpayPayment = async (createdOrder: CreatedOrder) => {
+    console.log("Handling Razorpay Payment for Order:", createdOrder);
     const res = await loadRazorpayScript();
 
     if (!res) {
@@ -58,7 +106,7 @@ const CheckoutPage: React.FC = () => {
       {
         amount: totalPrice,
         currency: "INR",
-        id: "order_12345",
+        id: createdOrder.id, // Use the order ID from createdOrder
       },
       {
         headers: {
@@ -203,7 +251,7 @@ const CheckoutPage: React.FC = () => {
                 </div>
 
                 <button
-                  onClick={handleRazorpayPayment}
+                  onClick={placeOrder}
                   disabled={!submittedData}
                   className={`w-full py-3 mt-6 font-semibold text-white rounded-md shadow-md transition ${
                     submittedData

@@ -23,6 +23,13 @@ export interface InventoryItem {
   quantity: number;
   imageUrl: string;
 }
+export interface OrderItem {
+  id?: String;
+  productId: number;
+  productName: string;
+  quantity: number;
+  price: number;
+}
 export interface BillingFormData {
   fullName: string;
   email: string;
@@ -30,4 +37,18 @@ export interface BillingFormData {
   address: string;
   city: string;
   pin: string;
+}
+
+export interface CreatedOrder {
+  id?: string;
+  customerId: number;
+  shippingAddress: string;
+  billingAddress: string;
+  status: String;
+  paymentMethod: String;
+  notes: string;
+  orderDate: string;
+  deliveryDate: string;
+  totalAmount: number;
+  items: OrderItem[];
 }
